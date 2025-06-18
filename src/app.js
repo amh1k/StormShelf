@@ -23,6 +23,8 @@ app.use(cookieParser())
 //import routes
 import healthCheckRouter from "./routes/healthcheck.route.js"
 import userRouter from "./routes/user.route.js"
+import bookRouter from "./routes/book.route.js"
+import favouritesRouter from "./routes/favourites.route.js"
 
 
 app.use("/api/v1/healthcheck", healthCheckRouter)
@@ -30,5 +32,11 @@ app.use("/api/v1/healthcheck", healthCheckRouter)
 
 //User route
 app.use("/api/v1/user", userRouter);
+
+//book route
+app.use("/api/v1/books", bookRouter)
+
+//favourites route
+app.use("/api/v1/favourites", favouritesRouter)
 
 export {app}
