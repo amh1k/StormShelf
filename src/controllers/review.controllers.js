@@ -76,4 +76,79 @@ const deleteReview = asyncHandler(async (req, res) => {
     );
 });
 
-export { addReview, deleteReview }
+const getAllBooksAvgRating = asyncHandler(async (req, res) => {
+    const avgRatings = await Reviews.aggregate([
+        {
+            $group: {
+                _id: "$book",
+                avgRating: { $avg: "$rating" },
+                totalReviews: { $sum: 1 }
+            }
+        },
+        {
+            $lookup: {
+                from: "books",
+                localField: "_id",
+                foreignField: "_id",
+                as: "book"
+            }
+        },
+        {
+            $unwind: "$book"
+        },
+        {
+            $project: {
+                _id: 0,
+                bookId: "$book._id",
+                title: "$book.title",
+                author: "$book.author",
+                avgRating: { $round: ["$avgRating", 2] },
+                totalReviews: 1
+            }
+        }
+    ])
+    return res.status(200).json(new ApiResponse(200, avgRatings, "Average rating of each books compiled successfully"))
+
+
+})
+
+const getTopBooks = asyncHandler(async (req, res) => {
+    const page = paseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 5;
+    const skip = (page - 1) * limit;
+    const getTopRating = await Reviews.aggregate([
+        {
+            $group: {
+                _id: "$book",
+                avgRating: { $avg: "$rating" },
+                totalReviews: { $sum: 1 }
+            }
+        },
+        {
+            $lookup: {
+                from: "books",
+                localField: "_id",
+                foreignField: "_id",
+                as: "book"
+            }
+        },
+        { $unwind: "$book" },
+        {
+            $project: {
+                _id: 0,
+                bookId: "$book._id",
+                title: "$book.title",
+                author: "$book.author",
+                avgRating: { $round: ["$avgRating", 2] },
+                totalReviews: 1
+            }
+        },
+        { $sort: { avgRating: -1 } },
+        { $skip: skip },
+        { $limit: limit }
+    ])
+    return res.status(200).json(new ApiResponse(200, getTopRating, "getting top rated books operation executed succcessfully"))
+
+})
+
+export { addReview, deleteReview, getAllBooksAvgRating, getTopBooks }
