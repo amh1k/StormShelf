@@ -1,6 +1,6 @@
 # StormShelf 📚
 
-StormShelf is a robust backend book management system built with the MERN stack (Node.js, Express, MongoDB). it provides a comprehensive API for managing book collections, user authentication, reviews, and favorites, with integrated image processing via Cloudinary.
+StormShelf is a TypeScript backend book management system built with Node.js, Express, and MongoDB. It provides a comprehensive API for managing book collections, user authentication, reviews, and favorites, with integrated image processing via Cloudinary.
 
 ## 🚀 Features
 
@@ -14,6 +14,7 @@ StormShelf is a robust backend book management system built with the MERN stack 
 
 ## 🛠️ Tech Stack
 
+- **Language**: [TypeScript](https://www.typescriptlang.org/)
 - **Runtime Environment**: [Node.js](https://nodejs.org/)
 - **Web Framework**: [Express.js](https://expressjs.com/)
 - **Database**: [MongoDB](https://www.mongodb.com/) with [Mongoose](https://mongoosejs.com/)
@@ -31,8 +32,9 @@ src/
 ├── models/         # Mongoose schemas & models
 ├── routes/         # API endpoint definitions
 ├── utils/          # Helper functions (Cloudinary, Error handlers, etc.)
-├── app.js          # Express app configuration
-└── index.js        # Server entry point
+├── types/          # Express and project-wide type declarations
+├── app.ts          # Express app configuration
+└── index.ts        # Server entry point
 ```
 
 ## ⚙️ Getting Started
@@ -46,60 +48,72 @@ src/
 ### Installation
 
 1. **Clone the repository**:
+
    ```bash
    git clone <repository-url>
    cd StormShelf
    ```
 
 2. **Install dependencies**:
+
    ```bash
    npm install
    ```
 
 3. **Environment Setup**:
    Create a `.env` file in the root directory and add the following variables:
+
    ```env
    PORT=9000
    URL=your_mongodb_connection_string
    CORS_ORIGIN=http://localhost:5173
-   
+
    ACCESS_TOKEN_SECRET=your_access_token_secret
    ACCESS_TOKEN_EXPIRY=1d
    REFRESH_TOKEN_SECRET=your_refresh_token_secret
    REFRESH_TOKEN_EXPIRY=10d
-   
+
    CLOUDINARY_CLOUD_NAME=your_cloud_name
    CLOUDINARY_API_KEY=your_api_key
    CLOUDINARY_API_SECRET=your_api_secret
    ```
 
 4. **Run the application**:
-   - For development (with nodemon):
+   - For development (with automatic reload):
      ```bash
      npm run dev
      ```
-   - For production:
+   - Type-check the project:
      ```bash
+     npm run typecheck
+     ```
+   - Build and run for production:
+     ```bash
+     npm run build
      npm start
      ```
 
 ## 🛣️ API Endpoints (v1)
 
 ### User Routes
+
 - `POST /api/v1/user/register` - Create a new account
 - `POST /api/v1/user/login` - Authenticate user
 - `POST /api/v1/user/logout` - Clear authentication cookies
 
 ### Book Routes
+
 - `GET /api/v1/books` - Retrieve all books
 - `POST /api/v1/books` - Add a new book (Admin/Authorized)
 - `GET /api/v1/books/:id` - Get details of a specific book
 
 ### Favorites Routes
+
 - `GET /api/v1/favourites` - Get user's favorite books
 - `POST /api/v1/favourites` - Add a book to favorites
 
 ### Reviews Routes
+
 - `POST /api/v1/reviews` - Add a review to a book
 - `GET /api/v1/reviews/:bookId` - Get reviews for a specific book
 
